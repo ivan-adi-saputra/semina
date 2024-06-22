@@ -1,1 +1,1 @@
-# semina
+# Semina Event
