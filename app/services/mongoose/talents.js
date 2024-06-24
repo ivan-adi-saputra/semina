@@ -108,4 +108,5 @@ module.exports = {
   getOneTalents,
   updateTalents,
   deleteTalents,
+  checkingTalents,
 };
