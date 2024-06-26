@@ -17,6 +17,11 @@ const talentSchema = Schema(
       ref: "Image", // nama harus sesuai dengan nama model ( dengan kapitalisasi juga )
       required: true,
     },
+    organizer: {
+      type: mongoose.Types.ObjectId,
+      ref: "Organizer",
+      required: true,
+    },
   },
   { timestamps: true }
 );

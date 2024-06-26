@@ -5,7 +5,7 @@ const { NotFoundError, BadRequestError } = require("../../errors");
 const getAllTalents = async (req) => {
   const { keyword } = req.query;
 
-  let condition = {};
+  let condition = { organizer: req.user.organizer };
 
   if (keyword) {
     condition = {
@@ -39,7 +39,12 @@ const createTalents = async (req) => {
 
   if (check) throw new BadRequestError("pembicara nama duplikat");
 
-  const result = await Talents.create({ name, role, image });
+  const result = await Talents.create({
+    name,
+    role,
+    image,
+    organizer: req.user.organizer,
+  });
 
   return result;
 };
@@ -47,7 +52,10 @@ const createTalents = async (req) => {
 const getOneTalents = async (req) => {
   const { id } = req.params;
 
-  const result = await Talents.findOne({ _id: id })
+  const result = await Talents.findOne({
+    _id: id,
+    organizer: req.user.organizer,
+  })
     .populate({
       path: "image",
       select: "_id name",
@@ -67,6 +75,7 @@ const updateTalents = async (req) => {
 
   const check = await Talents.findOne({
     name,
+    organizer: req.user.organizer,
     _id: { $ne: id },
   });
 

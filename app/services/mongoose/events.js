@@ -7,7 +7,7 @@ const { BadRequestError, NotFoundError } = require("../../errors");
 const getAllEvents = async (req) => {
   const { keyword, category, talent } = req.query;
 
-  let condition = {};
+  let condition = { organizer: req.user.organizer };
 
   if (keyword) {
     condition = { ...condition, title: { $regex: keyword, $options: "i" } };
@@ -77,6 +77,7 @@ const createEvents = async (req) => {
     image,
     category,
     talent,
+    organizer: req.user.organizer,
   });
 
   return result;
@@ -85,7 +86,10 @@ const createEvents = async (req) => {
 const getOneEvents = async (req) => {
   const { id } = req.params;
 
-  const result = await Events.findOne({ _id: id })
+  const result = await Events.findOne({
+    _id: id,
+    organizer: req.user.organizer,
+  })
     .populate({
       path: "image",
       select: "_id, name",
@@ -128,7 +132,10 @@ const updateEvents = async (req) => {
   await checkingCategories(category);
   await checkingTalents(talent);
 
-  const checkId = await Events.findOne({ _id: id });
+  const checkId = await Events.findOne({
+    _id: id,
+    organizer: req.user.organizer,
+  });
   if (!checkId) throw new NotFoundError(`Tidak ada events dengan id: ${id}`);
 
   const check = await Events.findOne({
