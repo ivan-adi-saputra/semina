@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const cors = require("cors");
 
 // router
 const categoriesRouter = require("./app/api/v1/categories/router");
@@ -21,6 +22,7 @@ const handleErrorMiddleware = require("./app/middlewares/handler-error");
 
 const app = express();
 
+app.use(cors()); // untuk mengizinkan url mengakses ke url backend
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
